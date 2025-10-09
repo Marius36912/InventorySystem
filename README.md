@@ -31,5 +31,10 @@
 // Jeg tager fuldt ansvar for den endelige kode, struktur og rapport.
 // Jeg er ansvarlig for den afleverede løsning.
 
+//Filervedlagt
+// Screen cap
+// Flowdiagram
+// Class diagram
+
 
 // =======================================================
