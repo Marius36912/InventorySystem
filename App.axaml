@@ -1,0 +1,19 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="InventorySystem2.App"
+             xmlns:local="using:InventorySystem2"
+             RequestedThemeVariant="Default">
+
+    <!-- skabelon til hvordan views findes ud fra view models -->
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <!-- fluent theme giver moderne udseende -->
+        <FluentTheme />
+
+        <!-- tilføjer standard tema til datagrid -->
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    </Application.Styles>
+</Application>

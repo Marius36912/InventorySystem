@@ -1,0 +1,124 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:InventorySystem2.ViewModels"
+        x:Class="InventorySystem2.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="1000" Height="650"
+        Title="Inventory System (Basic)">
+
+  <!-- 
+    Dette er hovedvinduet i mit program, som jeg har lavet med Avalonia
+    Jeg bruger MVVM template som angivet i noten, hvor view’et her
+    binder direkte til viewmodel’en mainwindowviewmodel.
+    Jeg har valgt et simpelt layout med Grid for at strukturere mine sektioner tydeligt.
+  -->
+
+  <Grid Margin="16"
+        RowDefinitions="Auto,Auto,*,*"
+        ColumnDefinitions="*,*">
+
+    <!-- Header -->
+    <TextBlock Grid.ColumnSpan="2"
+               FontSize="20" FontWeight="SemiBold"
+               Text="Inventory System — basic view" />
+    <!-- 
+      Overskrift med tydelig titel for brugergrænsefladen.
+      grid columnspan gør at teksten dækker begge kolonner.
+      fontsize og fontweight bruges til hierarki i UI’et for brugervenlighed og læsbarhed
+    -->
+
+    <!-- Controls row -->
+    <StackPanel Grid.Row="1" Grid.ColumnSpan="2"
+                Orientation="Horizontal" Spacing="12" Margin="0,8,0,8">
+      <!-- 
+        StackPanel brugt med vandret layout til knapper og tekst.
+        Her udnytter jeg bindinger til viewmodel kommandoer og properties.
+      -->
+
+      <Button Content="Process next order"
+              Command="{Binding ProcessNextCommand}" />
+      <!-- 
+        Binding til en iCommand i viewmodelen
+        Gør knappen smart den kalder metoden i viewmodelen
+        Dette understøtter separation af logik og præsentation
+      -->
+
+      <TextBlock VerticalAlignment="Center" Text="Total revenue:"/>
+      <TextBlock VerticalAlignment="Center" FontWeight="Bold"
+                 Text="{Binding TotalRevenue, StringFormat={}{0:C}}" />
+      <!-- 
+        Her binder jeg et tekst felt til en decimal property i vm
+        StringFormat formaterer tallet som valuta
+      -->
+    </StackPanel>
+
+    <!-- Queued Orders sektion -->
+    <StackPanel Grid.Row="2" Grid.Column="0">
+      <TextBlock Text="Queued orders"
+                 FontWeight="SemiBold"
+                 Margin="0,0,0,4"/>
+      <!-- 
+        Jeg bruger StackPanel her for enkel vertikal opstilling af label + DataGrid.
+        Teksten angiver tydeligt, hvad listen viser.
+      -->
+
+      <DataGrid ItemsSource="{Binding QueuedOrders}"
+                AutoGenerateColumns="False"
+                GridLinesVisibility="All"
+                IsReadOnly="True"
+                Height="260">
+        <!-- 
+          For DataGrid her bruger jeg databinding til
+          en ObservableCollection eller List i viewmodelen i qued orders
+          Laver noget read only og autogenrate false for sikring.
+        -->
+
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Time"  Binding="{Binding Time}" />
+          <!-- 
+            Binder her til datetime property i Order objektet 
+          -->
+
+          <!-- lines summary er en string property vi selv har defineret i orderklassen -->
+          <DataGridTextColumn Header="Lines" Binding="{Binding LinesSummary}" />
+
+          <DataGridTextColumn Header="Total"
+                              Binding="{Binding Total, StringFormat={}{0:C}}" />
+          <!-- 
+          formatterer en decimal til valuta i UI’et.
+            Dette giver en konsistent brugeroplevelse og kobler direkte til domænemodellen.
+          -->
+        </DataGrid.Columns>
+      </DataGrid>
+    </StackPanel>
+
+    <!-- Processed Orders sektion -->
+    <StackPanel Grid.Row="2" Grid.Column="1">
+      <TextBlock Text="Processed orders"
+                 FontWeight="SemiBold"
+                 Margin="0,0,0,4"/>
+      <!-- 
+        Spejler layoutet fra quoe, så brugeren let forstår flowet:
+        venstre = ordrer der venter, højre = ordrer der er behandlet.
+      -->
+
+      <DataGrid ItemsSource="{Binding ProcessedOrders}"
+                AutoGenerateColumns="False"
+                GridLinesVisibility="All"
+                IsReadOnly="True"
+                Height="260">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Time"  Binding="{Binding Time}" />
+          <DataGridTextColumn Header="Lines" Binding="{Binding LinesSummary}" />
+          <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={}{0:C}}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </StackPanel>
+
+    <!-- 
+      Jeg valgte at bruge to datagrids frem for ét med faneblade, fordi det tydeligt
+      viser forskellen mellem ventende og behandlede ordrer side om side.
+    -->
+
+  </Grid>
+</Window>
